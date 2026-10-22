@@ -34,6 +34,48 @@ El proyecto permitirá:
 - Validaciones.
 - Funciones auxiliares.
 
+## Funcionalidades implementadas
+
+Actualmente el sistema permite:
+
+- Crear usuarios.
+- Crear cuentas.
+- Relacionar cuentas con usuarios.
+- Realizar depósitos.
+- Registrar movimientos.
+- Aplicar reglas básicas del dominio.
+- Guardar usuarios en LocalStorage.
+- Guardar cuentas en LocalStorage.
+- Guardar movimientos en LocalStorage.
+- Recuperar datos después de recargar la página.
+- Reconstruir instancias de las clases almacenadas.
+
+## Usuario
+- class Usuario
+
+## Cuenta
+- class Cuenta
+
+## Movimiento
+- class Movimiento
+
+## Banco.js
+- agregarUsuario()
+- buscarUsuarioPorId()
+- agregarCuenta()
+- buscarCuentaPorId()
+- buscarCuentaPorNumero()
+- obtenerCuentasDeUsuario()
+- registrarMovimiento()
+- obtenerMovimientosDeCuenta()
+- realizarDeposito()
+
+## StorageService.js
+- LocalStorage
+- JSON.stringify()
+- JSON.parse()
+- STORAGE_KEYS
+
 ## Arquitectura
 
 El proyecto utilizará las siguientes capas:
@@ -45,4 +87,4 @@ El proyecto utilizará las siguientes capas:
 - Tests
 
 ## Versión actual
-v0.1.0 - Estructura inicial del proyecto
+v0.5.0 - Persistencia con LocalStorage y StorageService
