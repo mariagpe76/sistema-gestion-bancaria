@@ -13,6 +13,11 @@ class StorageService {
         localStorage.setItem(clave, valorJSON);
     }
 
+    // Alias para mantener compatibilidad con módulos que usan guardar().
+    guardar(clave, valor) {
+        this.guardarDatos(clave, valor);
+    }
+
     // Método para obtener datos del almacenamiento local
     obtener(clave, valorPorDefecto = null) {
         const valor = localStorage.getItem(clave);

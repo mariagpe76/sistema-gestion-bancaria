@@ -157,4 +157,151 @@ export class Banco {
         );
     }
 
+    realizarTransferencia({
+        cuentaOrigenId,
+        cuentaDestinoId,
+        monto,
+        descripcion = '',
+    }) {
+        // Convertimos el monto recibido
+        // a número.
+        const montoNumerico =
+            Number(monto);
+
+
+        // Validamos que el monto sea
+        // numérico y mayor a cero.
+        if (
+            !Number.isFinite(
+                montoNumerico,
+            ) ||
+            montoNumerico <= 0
+        ) {
+            throw new Error(
+                'Monto inválido, el monto debe ser mayor a cero.',
+            );
+        }
+
+        // Buscamos las dos cuentas que
+        // participan en la operación.
+        const origen =
+            this.buscarCuentaPorId(
+                cuentaOrigenId,
+            );
+
+        const destino =
+            this.buscarCuentaPorId(
+                cuentaDestinoId,
+            );
+
+        if (!origen) {
+            throw new Error(
+                'La cuenta origen no existe.',
+            );
+        }
+
+        if (!destino) {
+            throw new Error(
+                'La cuenta destino no existe.',
+            );
+        }
+
+        // Las cuentas deben encontrarse
+        // activas para operar.
+        if (!origen.activa) {
+            throw new Error(
+                'La cuenta origen no está activa.',
+            );
+        }
+
+        if (!destino.activa) {
+            throw new Error(
+                'La cuenta destino no está activa.',
+            );
+        }
+
+        // Impedimos transferencias de una
+        // cuenta hacia ella misma.
+        if (
+            origen.id === destino.id
+        ) {
+            throw new Error(
+                'No puedes transferir dinero a la misma cuenta',
+            );
+        }
+
+        // La cuenta origen necesita saldo
+        // suficiente para completar la operación.
+        if (
+            origen.saldo <
+            montoNumerico
+        ) {
+            throw new Error(
+                'Saldo insuficiente',
+            );
+        }
+
+        // Descontamos el dinero de la cuenta
+        // origen.
+        origen.retirar(
+            montoNumerico,
+        );
+
+        // Depositamos el mismo monto
+        // en la cuenta destino.
+        destino.depositar(
+            montoNumerico,
+        );
+
+        // Creamos el movimiento desde la
+        // perspectiva del emisor.
+        const movimientoEnviado =
+            new Movimiento({
+                tipo:
+                    'TRANSFERENCIA_ENVIADA',
+                monto:
+                    montoNumerico,
+                descripcion,
+                cuentaOrigen:
+                    origen.id,
+                cuentaDestino:
+                    destino.id,
+                saldoResultante:
+                    origen.saldo,
+            });
+
+        // Creamos el movimiento desde la
+        // perspectiva del receptor.
+        const movimientoRecibido =
+            new Movimiento({
+                tipo:
+                    'TRANSFERENCIA_RECIBIDA',
+                monto:
+                    montoNumerico,
+                descripcion,
+                cuentaOrigen:
+                    origen.id,
+                cuentaDestino:
+                    destino.id,
+                saldoResultante:
+                    destino.saldo,
+            });
+
+        // Guardamos ambos movimientos.
+        this.registrarMovimiento(
+            movimientoEnviado,
+        );
+
+        this.registrarMovimiento(
+            movimientoRecibido,
+        );
+
+        return {
+            origen,
+            destino,
+            movimientoEnviado,
+            movimientoRecibido,
+        };
+    }
+
 }

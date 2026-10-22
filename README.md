@@ -76,6 +76,25 @@ Actualmente el sistema permite:
 - JSON.parse()
 - STORAGE_KEYS
 
+## AuthService
+- registro
+- login
+- logout
+- sesión
+- SweetAlert2
+- DOM
+- eventos
+- dashboard.html
+
+### BancoService
+
+- cargarBanco()
+- obtenerInstanciaBanco()
+- recargarBanco()
+- guardarBanco()
+- obtenerDatosUsuario()
+- obtenerResumenUsuario()
+
 ## Arquitectura
 
 El proyecto utilizará las siguientes capas:
@@ -87,4 +106,4 @@ El proyecto utilizará las siguientes capas:
 - Tests
 
 ## Versión actual
-v0.5.0 - Persistencia con LocalStorage y StorageService
+v0.10.0 - Historial de movimientos, filtros y consulta de operaciones
